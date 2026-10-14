@@ -147,6 +147,19 @@ int main(){
                 printf("Top Scorer: ID: %d, Name: %s, Marks: %.2f\n", top->id, top->name, top->marks);
                 break;
 
+            case 6:
+                f = fopen("students.txt", "w");
+                if (f == NULL) {
+                    fprintf(stderr, "Could not open file for writing\n");
+                    free(s);
+                    return 1;
+                }
+                for(int i = 0; i < count; i++){
+                    fprintf(f, "%d %s %.2f\n", s[i].id, s[i].name, s[i].marks);
+                }
+                fclose(f);
+                return 0;
+
         }
     }
 }
