@@ -7,6 +7,25 @@ typedef struct {
     float marks;
 } Student;
 
+Student *add_student(Student *s, int *count, int *cap, int id, const char *name, float marks) {
+    if (*count == *cap) {
+        Student *temp = realloc(s, (*cap * 2) * sizeof(Student));
+        if (temp == NULL) {
+            fprintf(stderr, "Memory reallocation failed\n");
+            free(s);
+            return NULL;
+        }
+        s = temp;
+        *cap *= 2;  
+    }
+
+    s[*count].id = id;
+    snprintf(s[*count].name, sizeof(s[*count].name), "%s", name);
+    s[*count].marks = marks;
+    (*count)++;
+    return s;
+}
+
 Student *search(Student *s, int count, int id) {
     for(int i=0;i<count;i++){
         if(s[i].id == id){
@@ -41,6 +60,23 @@ int main(){
         return 1;
     }
 
+    FILE *f = fopen("students.txt", "r");
+
+    if (f == NULL) {
+        fprintf(stderr, "Could not open file for reading\n");
+        return 1;
+    }
+
+    Student temp;
+    while(fscanf(f, "%d %49s %f", &temp.id, temp.name, &temp.marks) == 3){
+        s = add_student(s, &count, &cap, temp.id, temp.name, temp.marks);
+        if (s == NULL) {  
+            fclose(f);
+            return 1;  
+        }
+    }
+    fclose(f);
+
     while(1){
         printf("1. Add a Student\n");
         printf("2. Display all Students\n");
@@ -54,24 +90,19 @@ int main(){
         switch(choice){
 
             case 1:
-                if(count == cap){
-                    Student *temp = realloc(s, (cap * 2) * sizeof(Student));
-                    if (temp == NULL) {
-                        fprintf(stderr, "Memory reallocation failed\n");
-                        free(s);
-                        return 1;
-                    }
-                    s = temp;
-                    cap *= 2;  
-                }
-
+                
                 printf("Enter Student ID: ");
                 scanf("%d", &s[count].id);
                 printf("Enter Student Name: ");
                 scanf("%s", s[count].name);
                 printf("Enter Student Marks: ");
                 scanf("%f", &s[count].marks);
-                count++;
+
+                s = add_student(s, &count, &cap, s[count].id, s[count].name, s[count].marks);
+                if (s == NULL) {   
+                    return 1;  
+                }
+                
                 break;
 
             case 2:
@@ -107,7 +138,7 @@ int main(){
                 break;
 
             case 5:
-            
+
                 Student *top = highest(s, count);
                 if (top == NULL) {  
                     printf("No students available to find top scorer.\n");
