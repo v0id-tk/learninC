@@ -16,6 +16,20 @@ Student *search(Student *s, int count, int id) {
     return NULL;
 }
 
+Student *highest(Student *s, int count){
+    if (count == 0) {
+        return NULL;  
+    }
+
+    Student *top = &s[0];
+    for(int i=1;i<count;i++){
+        if(s[i].marks > top->marks){
+            top = &s[i];
+        }
+    }
+    return top;
+}
+
 int main(){ 
     int cap=2;
     int count=0;
@@ -80,6 +94,28 @@ int main(){
                 break;
 
             case 4:
+                printf("Enter Student ID to update marks: ");
+                scanf("%d", &id);
+                found = search(s, count, id);
+                if (found != NULL) {
+                    printf("Enter new marks for %s: ", found->name);
+                    scanf("%f", &found->marks);
+                    printf("Marks updated successfully.\n");
+                } else {
+                    printf("Student not found.\n");
+                }
+                break;
+
+            case 5:
+            
+                Student *top = highest(s, count);
+                if (top == NULL) {  
+                    printf("No students available to find top scorer.\n");
+                    break;
+                }
+                printf("Top Scorer: ID: %d, Name: %s, Marks: %.2f\n", top->id, top->name, top->marks);
+                break;
+
         }
     }
 }
