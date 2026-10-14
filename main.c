@@ -7,7 +7,14 @@ typedef struct {
     float marks;
 } Student;
 
-
+Student *search(Student *s, int count, int id) {
+    for(int i=0;i<count;i++){
+        if(s[i].id == id){
+            return &s[i];
+        }
+    }
+    return NULL;
+}
 
 int main(){ 
     int cap=2;
@@ -61,6 +68,18 @@ int main(){
                 break;
 
             case 3:
+                printf("Enter Student ID to search: ");
+                int id;
+                scanf("%d", &id);
+                Student *found = search(s, count, id);
+                if (found != NULL) {
+                    printf("Student found: ID: %d, Name: %s, Marks: %.2f\n", found->id, found->name, found->marks);
+                } else {
+                    printf("Student not found.\n");
+                }
+                break;
+
+            case 4:
         }
     }
 }
