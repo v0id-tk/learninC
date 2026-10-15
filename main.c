@@ -92,13 +92,13 @@ int main(){
             case 1:
                 
                 printf("Enter Student ID: ");
-                scanf("%d", &s[count].id);
+                scanf("%d", &temp.id);
                 printf("Enter Student Name: ");
-                scanf("%s", s[count].name);
+                scanf("%s", temp.name);
                 printf("Enter Student Marks: ");
-                scanf("%f", &s[count].marks);
+                scanf("%f", &temp.marks);
 
-                s = add_student(s, &count, &cap, s[count].id, s[count].name, s[count].marks);
+                s = add_student(s, &count, &cap, temp.id, temp.name, temp.marks);
                 if (s == NULL) {   
                     return 1;  
                 }
@@ -157,6 +157,7 @@ int main(){
                 for(int i = 0; i < count; i++){
                     fprintf(f, "%d %s %.2f\n", s[i].id, s[i].name, s[i].marks);
                 }
+                free(s);
                 fclose(f);
                 return 0;
 
