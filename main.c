@@ -7,6 +7,20 @@ typedef struct {
     float marks;
 } Student;
 
+void bubblesrt(Student *student,int x){
+    while(x){
+        for(int i=1;i<x;i++){
+            if(student[i-1].id>student[i].id){
+                Student temp = student[i-1];
+                student[i-1] = student[i];
+                student[i] = temp;
+            }
+        }
+        x--;
+    
+    }
+}
+
 Student *add_student(Student *s, int *count, int *cap, int id, const char *name, float marks) {
     if (*count == *cap) {
         Student *temp = realloc(s, (*cap * 2) * sizeof(Student));
@@ -83,7 +97,8 @@ int main(){
         printf("3. Search a Student by ID\n");
         printf("4. Update Student Marks\n");
         printf("5. Find top scorer\n");
-        printf("6. Save and Exit\n");
+        printf("6. Sort students by id\n");
+        printf("7. Save and Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -146,8 +161,13 @@ int main(){
                 }
                 printf("Top Scorer: ID: %d, Name: %s, Marks: %.2f\n", top->id, top->name, top->marks);
                 break;
-
+                
             case 6:
+                bubblesrt(s, count);
+                printf("Successfully sorted!\n");
+                break;
+
+            case 7:
                 f = fopen("students.txt", "w");
                 if (f == NULL) {
                     fprintf(stderr, "Could not open file for writing\n");
@@ -160,6 +180,11 @@ int main(){
                 free(s);
                 fclose(f);
                 return 0;
+            
+            default:
+                printf("INVALID INPUT! ENTER AGAIN!! \n");
+                break;
+                
 
         }
     }
