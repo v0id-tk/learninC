@@ -27,7 +27,21 @@ void bubblesrt(Student *student,int x,sort mode){
     }
 }
 
+Student *search(Student *s, int count, int id) {
+    for(int i=0;i<count;i++){
+        if(s[i].id == id){
+            return &s[i];
+        }
+    }
+    return NULL;
+}
+
+
 Student *add_student(Student *s, int *count, int *cap, int id, const char *name, float marks) {
+    if(search(s,*count,id)!=NULL){
+        return s;
+    }
+
     if (*count == *cap) {
         Student *temp = realloc(s, (*cap * 2) * sizeof(Student));
         if (temp == NULL) {
@@ -44,15 +58,6 @@ Student *add_student(Student *s, int *count, int *cap, int id, const char *name,
     s[*count].marks = marks;
     (*count)++;
     return s;
-}
-
-Student *search(Student *s, int count, int id) {
-    for(int i=0;i<count;i++){
-        if(s[i].id == id){
-            return &s[i];
-        }
-    }
-    return NULL;
 }
 
 Student *highest(Student *s, int count){
