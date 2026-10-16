@@ -7,10 +7,16 @@ typedef struct {
     float marks;
 } Student;
 
-void bubblesrt(Student *student,int x){
+typedef enum {
+    by_id,
+    by_mark
+} sort;
+
+void bubblesrt(Student *student,int x,sort mode){
     while(x){
         for(int i=1;i<x;i++){
-            if(student[i-1].id>student[i].id){
+            if((mode==by_id && student[i-1].id>student[i].id) ||
+            (mode==by_mark && student[i-1].marks<student[i].marks)){
                 Student temp = student[i-1];
                 student[i-1] = student[i];
                 student[i] = temp;
@@ -98,7 +104,8 @@ int main(){
         printf("4. Update Student Marks\n");
         printf("5. Find top scorer\n");
         printf("6. Sort students by id\n");
-        printf("7. Save and Exit\n");
+        printf("7. Sort students by marks\n");
+        printf("8. Save and Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -161,13 +168,19 @@ int main(){
                 }
                 printf("Top Scorer: ID: %d, Name: %s, Marks: %.2f\n", top->id, top->name, top->marks);
                 break;
-                
+
             case 6:
-                bubblesrt(s, count);
-                printf("Successfully sorted!\n");
+                bubblesrt(s, count,by_id);
+                printf("Successfully sorted by id!\n");
                 break;
 
             case 7:
+                bubblesrt(s, count,by_mark);
+                printf("Successfully sorted by marks!\n");
+                break;
+
+                
+            case 8:
                 f = fopen("students.txt", "w");
                 if (f == NULL) {
                     fprintf(stderr, "Could not open file for writing\n");
